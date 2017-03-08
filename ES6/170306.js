@@ -22,3 +22,62 @@ Object.defineProperty(obj1,mySym,{value:"wdxd"})
 // 新方法 Object.getOwnPropertySymbols()获取，返回一个数组
 // 新API：Reflect.ownKeys方法返回可以返回所有类型的键名
 
+// Symbol的11个内置方法
+是否是构造函数的实例化 
+		Foo[Symbol.hasInstance](foo) //boolean
+		class Myclass{
+			[Symbol.hasInstance](a){
+				return a instanceOf Array
+			}
+		}
+
+concat时，数组是否可扩展 
+		arr[Symbol.isConcatPreadable]=false //[,[]]
+		class a extends Array{ //说明此类实例化的数组对象是可以扩展的
+			[Symbol.isConcatPreadable](){
+				return true
+			}
+		}
+
+对于支持正则表达式的string对象的方法  
+当有string对象使用到以下方法时，自动替换
+class a{
+	[Symbol.match](a){
+		return 'hello'.indexOf(a);
+	}
+}
+'l'.match(new a());//2
+
+还有search，replace，split，都是类似的
+
+默认遍历器
+class c{
+	*[Symbol.iterator](){
+		let i = 0;
+		while(this[i]!==undefined){
+			yield this[i]
+			++i;
+		}
+	}
+}
+let mc = new c();
+mc[0]=1;
+mc[1]=2;
+for(let val of mc){
+	console.log(val);
+}//1,2
+
+转换类型时，调用方法
+let obj = {
+	[Symbol.toPrimitive](a){
+		switch(a){
+			case 'number':return 123;
+			case 'string':return 'str';
+			case 'undefined':return null;
+		}
+	}
+}
+123+obj;//246
+""+obj;//'str'
+obj === undefined;//
+String(obj);//'str'
