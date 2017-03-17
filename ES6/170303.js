@@ -61,3 +61,11 @@ Object.getPrototypeOf(ColorPoint) === Point; //true
 
 //class的静态属性，指的是Class本身的属性，即Class.propname 可读写
 
+new.target属性来判断实例化是否是通过new实现的
+function a(){
+	if(new.target !== a){
+		throw new Error("必须通过new实例化")
+	}
+}
+let a1 = new a() //true
+let a2 = a.call()//false

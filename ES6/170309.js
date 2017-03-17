@@ -131,3 +131,18 @@ function* longTask(){
 function* aa(){
     let [val1,val2] = yield[task1(),task2()];
 }
+
+Generator函数返回的是iterator对象
+function *a(){
+    yield 'x';
+    yield 'y';
+    yield 'a';
+    yield 'b';
+}
+for(let i of a()){
+    console.log(i)
+}
+// x
+// y
+// a
+// b

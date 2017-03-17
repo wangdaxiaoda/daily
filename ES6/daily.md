@@ -3,3 +3,4 @@
 170308.js  set,map数据结构
 170309.js  iterator，generator
 170314.js  promise函数
+170316.js  异步操作和async函数

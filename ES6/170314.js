@@ -13,3 +13,31 @@ pro.then(function(val){
 },function(val){
 	//fail
 })
+
+promise.resolve——把现有的对象变成promise对象
+Promise.resolve('foo')相当于
+new Promise(resolve=>resolve('foo'))
+
+let p = Promise.resolve('hello');
+p.then(val=>console.log(val));//'hello'
+
+promise.reject用法和promise.resolve类似
+Promise.reject('foo')===new Promise((resolve,reject)=>reject("foo"));
+
+自加两个很有用的附加方法：
+done():因为promise的回调链（then，catch）中，要是最后一个方法报错，就捕捉不到了（因为promise的错误不会冒泡到全局）
+Promise.prototype.done = function(onFulfilled,onRejected){
+	this.then(onFulfilled,onRejected)  //TODO 为什么先加一个then，而不是直接使用catch
+	.catch(function(reason){
+		setTimeout(()=>{throw reason},0);  //Todo 为什么不直接throw reason
+	})
+}
+
+finally():不管promise对象最后的状态如何，都会执行finally方法
+Promise.prototype.finally = function(callback){
+	let p = this.constructor;
+	return this.then(
+		value=>p.resolve(callback()).then(()=>value),
+		reason=>p.resolve(callback()).then(()=>{throw reason})
+		)
+}
